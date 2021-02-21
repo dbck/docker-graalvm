@@ -24,12 +24,12 @@ RUN apt-get -qq update \
     && rm -rf /var/lib/apt/lists/*
 
 # Prerequisites for native-image
-#RUN apt-get -qq update \
-#    && apt-get -qq install -y \
-#    build-essential \
-#    libz-dev \
-#    zlib1g-dev \
-#    && rm -rf /var/lib/apt/lists/*
+RUN apt-get -qq update \
+    && apt-get -qq install -y \
+    build-essential \
+    libz-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install graalvm
 # See: https://www.graalvm.org/docs/getting-started/linux/
@@ -42,7 +42,7 @@ RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ];then GRAALVM_PLATFORM=aarch64; e
 
 # Install native-image
 # https://www.graalvm.org/reference-manual/native-image/
-#RUN gu install native-image
+RUN gu install native-image
 
 COPY root/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod 755 /docker-entrypoint.sh
