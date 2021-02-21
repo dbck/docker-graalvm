@@ -23,14 +23,6 @@ RUN apt-get -qq update \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Prerequisites for native-image
-RUN apt-get -qq update \
-    && apt-get -qq install -y \
-    build-essential \
-    libz-dev \
-    zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install graalvm
 # See: https://www.graalvm.org/docs/getting-started/linux/
 # Download new versions: https://github.com/graalvm/graalvm-ce-builds/releases
@@ -40,6 +32,14 @@ RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ];then GRAALVM_PLATFORM=aarch64; e
     && tar -xzf /tmp/graalvm.tar.gz -C ${JAVA_HOME} --strip-components=1  \
     && rm /tmp/graalvm.tar.gz
 
+# Prerequisites for native-image
+RUN apt-get -qq update \
+    && apt-get -qq install -y \
+    build-essential \
+    libz-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+    
 # Install native-image
 # https://www.graalvm.org/reference-manual/native-image/
 RUN gu install native-image
