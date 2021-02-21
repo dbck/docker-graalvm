@@ -5,16 +5,17 @@ LABEL description "GraalVM"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG BUILDPLATFORM=linux/amd64
+ARG BUILDPLATFORM
 # Is linux/amd64 or linux/arm64
-ARG TARGETPLATFORM=linux/amd64
+ARG TARGETPLATFORM
 
-ENV PLATFORM="${TARGETPLATFORM}"
+ENV BUILD_PLATFORM="${BUILDPLATFORM}"
+ENV TARGET_PLATFORM="${TARGETPLATFORM}"
 ENV GRAALVM_VERSION="21.0.0.2"
 ENV PATH="/opt/graalvm/bin:${PATH}"
 ENV JAVA_HOME="/opt/graalvm"
 
-RUN echo "I am running on ${BUILDPLATFORM} and building for ${TARGETPLATFORM}"
+RUN echo "I am running on ${BUILD_PLATFORM} and building for ${TARGET_PLATFORM}"
 
 # Prerequisites to install graalvm
 RUN apt-get -qq update \
@@ -33,7 +34,7 @@ RUN apt-get -qq update \
 # Install graalvm
 # See: https://www.graalvm.org/docs/getting-started/linux/
 # Download new versions: https://github.com/graalvm/graalvm-ce-builds/releases
-RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ];then GRAALVM_PLATFORM=aarch64; else GRAALVM_PLATFORM=amd64; fi \
+RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ];then GRAALVM_PLATFORM=aarch64; else GRAALVM_PLATFORM=amd64; fi \
     && curl -LJ -o /tmp/graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-java11-linux-${GRAALVM_PLATFORM}-${GRAALVM_VERSION}.tar.gz \
     && mkdir -p ${JAVA_HOME} \
     && tar -xzf /tmp/graalvm.tar.gz -C ${JAVA_HOME} --strip-components=1  \
