@@ -1,0 +1,6 @@
+version: "3"
+services:
+  graalvm:
+    image: dbck/graalvm:${TAG}
+    build:
+      context: ./build
